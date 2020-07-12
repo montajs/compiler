@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render test file 1`] = `
+"
+
+<html>
+<head>
+	<title>extends</title>
+</head>
+<body>
+
+	<p>foo = bar</p>
+	
+
+<p>Hello, Foo</p>
+
+	<p>yo waddup foo</p>
+	<p>THIS IS A RATHER LONG MESSAGE THAT WE...</p>
+
+	
+		<p>0 a</p>
+	
+		<p>1 b</p>
+	
+		<p>2 false</p>
+	
+
+	
+		<p>0  yes </p>
+	
+		<p>1  yes </p>
+	
+		<p>2  no </p>
+	
+
+</body>
+</html>
+
+
+
+"
+`;

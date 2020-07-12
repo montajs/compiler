@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --ext .ts \"./src/**/*.ts\""
+    "lint": "eslint --ext .ts \"./src/**/*.ts\"",
+    "test": "jest"
   },
   "dependencies": {
     "@woubuc/multimap": "^1.0.1",
