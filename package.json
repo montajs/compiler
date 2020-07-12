@@ -1,14 +1,24 @@
 {
   "name": "@montajs/compiler",
-  "version": "0.0.0",
-  "main": "index.js",
   "license": "MIT",
+  "contributors": [
+    "Wouter Buckens <wou.buc@gmail.com> (https://www.woubuc.be)"
+  ],
+  "homepage": "https://www.montajs.com",
+  "repository": "montajs/compiler",
+  "bugs": "https://github.com/montajs/compiler/issues",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "build": "rimraf dist/* && tsc",
     "lint": "eslint --ext .ts \"./src/**/*.ts\"",
-    "test": "jest",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "test": "jest"
   },
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@woubuc/multimap": "^1.0.1",
     "fs-extra": "^9.0.1"
@@ -26,5 +36,8 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
+  },
+  "engines": {
+    "node": ">=10"
   }
 }
