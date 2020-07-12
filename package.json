@@ -1,11 +1,13 @@
 {
   "name": "@montajs/compiler",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "build": "rimraf dist/* && tsc",
     "lint": "eslint --ext .ts \"./src/**/*.ts\"",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "@woubuc/multimap": "^1.0.1",
@@ -21,6 +23,7 @@
     "eslint-plugin-prefer-let": "^1.0.2",
     "eslint-plugin-unicorn": "^20.1.0",
     "jest": "^26.1.0",
+    "rimraf": "^3.0.2",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
   }
