@@ -7,7 +7,7 @@ import { component } from './parserFunctions/component';
 import { capitalise } from './runtimeFunctions/capitalise';
 import { lowercase } from './runtimeFunctions/lowercase';
 import { uppercase } from './runtimeFunctions/uppercase';
-import { forEach } from './runtimeFunctions/forEach';
+import { each } from './runtimeFunctions/each';
 import { truncate } from './runtimeFunctions/truncate';
 import { conditionalIf } from './runtimeFunctions/if';
 import { attr } from './parserFunctions/attr';
@@ -19,14 +19,14 @@ import { RenderFn } from '../Template';
 import { extend } from './parserFunctions/extend';
 
 export interface MontaFunctionContext {
-	input ? : any;
+	input? : any;
 	params : Map<string, Token>;
 	blocks : MultiMap<string, RenderFn>;
 	context : RenderContext;
 }
 
 export interface MontaParserFunctionContext {
-	input ?: any;
+	input? : any;
 	params : Map<string, Token>;
 	blocks : MultiMap<string, RenderFn>;
 	context : ParseContext;
@@ -47,25 +47,18 @@ export function registerParserFunction(name : string, fn : MontaParserFunction) 
 }
 
 registerFunction('if', conditionalIf);
-registerFunction('each', forEach);
-registerFunction('foreach', forEach);
-
+registerFunction('each', each);
 
 registerFunction('capitalise', capitalise);
 registerFunction('lower', lowercase);
-registerFunction('lowercase', lowercase);
 registerFunction('upper', uppercase);
-registerFunction('uppercase', uppercase);
 registerFunction('truncate', truncate);
 
 
 registerParserFunction('define', define);
 registerParserFunction('block', block);
 
-registerParserFunction('extend', extend);
 registerParserFunction('extends', extend);
 registerParserFunction('include', include);
 registerParserFunction('component', component);
 registerParserFunction('attr', attr);
-
-

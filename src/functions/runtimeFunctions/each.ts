@@ -1,7 +1,7 @@
 import { MontaFunctionContext } from '../functions';
 import { RenderFn } from '../../Template';
 
-export async function forEach({ input, blocks, context } : MontaFunctionContext) : Promise<string[] | RenderFn[]> {
+export async function each({ input, blocks, context } : MontaFunctionContext) : Promise<string[] | RenderFn[]> {
 	if (input === undefined) {
 		return [];
 	}
