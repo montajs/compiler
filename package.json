@@ -7,7 +7,7 @@
   "homepage": "https://www.montajs.com",
   "repository": "montajs/compiler",
   "bugs": "https://github.com/montajs/compiler/issues",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "files": [
     "dist/**/*"
