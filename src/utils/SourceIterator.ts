@@ -37,7 +37,7 @@ export class SourceIterator extends Iterator<string> {
 
 	public skipWhitespace() : void {
 		while (this.hasNext()) {
-			let peek = this.peek()!;
+			let peek = this.peek() as string;
 
 			if (/\s/.test(peek)) {
 				this.skip();

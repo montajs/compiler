@@ -1,5 +1,5 @@
 import { ParseContext } from '../ParseContext';
-import { RenderFn } from '../../Template';
+import { RenderFn, RenderFnOutput } from '../../Template';
 import { Node } from '../Node';
 import { RenderContext } from '../../RenderContext';
 import { Logger } from '../../utils/Logger';
@@ -34,19 +34,24 @@ export class ExpressionNode extends Node {
 		}
 		Logger.groupEnd();
 
-		return renderExpressionNode.bind(null, members);
+		return renderExpressionNode.bind(undefined, members);
 	}
 }
 
-async function renderExpressionNode(members : RenderFn[], context : RenderContext) {
+async function renderExpressionNode(members : RenderFn[], context : RenderContext) : Promise<RenderFnOutput[]> {
 	Logger.group('RENDER ExpressionNode');
 	Logger.info('| members: %d', members.length);
 
-	let value : any = await members[0](context);
+	let value : RenderFnOutput | RenderFnOutput[] = await members[0](context);
 	for (let i = 1; i < members.length; i++) {
 		value = await members[i](context, value);
 	}
 
 	Logger.groupEnd();
+
+	if (!Array.isArray(value)) {
+		return [value];
+	}
+
 	return value;
 }

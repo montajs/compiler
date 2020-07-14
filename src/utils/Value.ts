@@ -6,7 +6,7 @@ export class Value<T> {
 		this.value = initialValue;
 	}
 
-	public set(value : T) {
+	public set(value : T) : void {
 		this.value = value;
 	}
 

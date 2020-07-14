@@ -37,7 +37,7 @@ function scanPlainTextSection(source : SourceIterator, isBlock : boolean = false
 	let currentBlockName = 'default';
 
 	while (source.hasNext()) {
-		let next = source.next()!;
+		let next = source.next();
 
 		let escaped = false;
 		if (next === '\\' && (

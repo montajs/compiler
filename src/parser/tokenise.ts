@@ -93,7 +93,7 @@ function getStringLiteral(source : SourceIterator, quote : string) : Token {
 	let value = '';
 
 	while (source.hasNext()) {
-		let next = source.next()!;
+		let next = source.next();
 
 		if (next === quote && source.peekBack() !== '\\') {
 			return {
@@ -116,7 +116,11 @@ function getNumberLiteral(source : SourceIterator, start : string) : Token {
 	let value = start;
 
 	while (source.hasNext()) {
-		let peek = source.peek()!;
+		let peek = source.peek();
+
+		if (peek === undefined) {
+			throw new Error('Unexpected end of input');
+		}
 
 		let isNumberLiteral = NUMBER_MIDDLE.test(peek);
 
@@ -191,7 +195,11 @@ function getKeyword(source : SourceIterator, start : string) : Token {
 	let value = start;
 
 	while (source.hasNext()) {
-		let peek = source.peek()!;
+		let peek = source.peek();
+
+		if (peek === undefined) {
+			throw new Error('Unexpected end of input');
+		}
 
 		let isValidKeyword = KEYWORD_MIDDLE.test(peek);
 

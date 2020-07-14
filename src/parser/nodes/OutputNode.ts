@@ -8,7 +8,7 @@ import { Logger } from '../../utils/Logger';
  */
 export class OutputNode extends Node {
 	/** Value of the node */
-	public readonly value : any;
+	private readonly value : any;
 
 	public constructor(value : any) {
 		super();
@@ -17,9 +17,7 @@ export class OutputNode extends Node {
 	}
 
 	public async createRenderFunction(parseContext : ParseContext) : Promise<RenderFn> {
-		let type = typeof this.value;
-
-		if (type === 'string' || type === 'number' || type === 'boolean') {
+		if (typeof this.value === 'string' || typeof this.value === 'number' || typeof this.value === 'boolean') {
 			Logger.info('CRF OutputNode');
 			let value = this.value.toString();
 			return () => value;

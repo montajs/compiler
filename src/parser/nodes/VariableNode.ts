@@ -1,5 +1,5 @@
 import { Token } from '../Token';
-import { RenderFn } from '../../Template';
+import { RenderFn, RenderFnOutput } from '../../Template';
 import { Node } from '../Node';
 import { RenderContext } from '../../RenderContext';
 import { OutputNode } from './OutputNode';
@@ -29,7 +29,7 @@ export class VariableNode extends Node {
 			Logger.info('| ident: %s', this.keyword.value);
 			Logger.groupEnd();
 
-			return renderVariableNode.bind(null, this.keyword);
+			return renderVariableNode.bind(undefined, this.keyword);
 		}
 
 		Logger.info('| type: parse');
@@ -41,6 +41,6 @@ export class VariableNode extends Node {
 	}
 }
 
-function renderVariableNode(keyword : Token, renderContext : RenderContext) {
-	return renderContext.getValue(keyword);
+function renderVariableNode(keyword : Token, renderContext : RenderContext) : RenderFnOutput {
+	return renderContext.getValue(keyword) as RenderFnOutput;
 }

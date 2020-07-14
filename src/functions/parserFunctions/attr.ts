@@ -12,7 +12,7 @@ export function attr({ input, params, context } : MontaParserFunctionContext) : 
 	let varName = context.getValue(input);
 
 	if (varName === undefined) {
-		throw new Error('Invalid input for attr: ' + input.value);
+		throw new Error(`Invalid input for attr`);
 	}
 
 	let name = varName.toString();
@@ -20,7 +20,7 @@ export function attr({ input, params, context } : MontaParserFunctionContext) : 
 
 	let required = Boolean(context.getValue(params.get('required')) ?? false);
 	if (required && value === undefined) {
-		throw new Error('Undefined attr: ' + input.value);
+		throw new Error(`Undefined attr`);
 	}
 
 	if (value === undefined) {
@@ -30,15 +30,15 @@ export function attr({ input, params, context } : MontaParserFunctionContext) : 
 	let type = context.getValue(params.get('type'))?.toString();
 	if (type !== undefined) {
 		if (value.type === TokenType.Literal && typeof value.value !== type) {
-			throw new Error('Invalid attr type for ' + input.value + ', expected ' + type + ' got ' + typeof value);
+			throw new Error(`Invalid attr type, expected ${ type } got ${ typeof value }`);
 		}
 	}
 
 	if (value.type === TokenType.Literal) {
-		return [assignAttributeLiteral.bind(null, name, value.value)];
+		return [assignAttributeLiteral.bind(undefined, name, value.value)];
 	}
 
-	return [validateAttribute.bind(null, name, value, required, type)];
+	return [validateAttribute.bind(undefined, name, value, required, type)];
 }
 
 function assignAttributeLiteral(name : string, value : any, renderContext : RenderContext) : string[] {
@@ -50,11 +50,11 @@ function validateAttribute(name : string, token : Token, required : boolean, typ
 	let value = renderContext.getValue(token);
 
 	if (required && value === undefined) {
-		throw new Error('Undefined attr: ' + name);
+		throw new Error(`Undefined attr: ${ name }`);
 	}
 
 	if (type !== undefined && typeof value !== type) {
-		throw new Error('Invalid attr type for ' + name + ', expected ' + type + ' got ' + typeof value);
+		throw new Error(`Invalid attr type for ${ name }, expected ${ type } got ${ typeof value }`);
 	}
 
 	renderContext.setVariable(name, renderContext.getValue(token));

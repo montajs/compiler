@@ -1,6 +1,7 @@
 import { TokenType } from './parser/TokenType';
 import { Token } from './parser/Token';
 import { RenderFn } from './Template';
+import { Logger } from './utils/Logger';
 
 export type Renderable = string | number | boolean | Record<string, any> | undefined | RenderFn;
 
@@ -23,7 +24,7 @@ export class RenderContext {
 	}
 
 	public getData<T>(namespace : string, key : string) : T | undefined {
-		return this.data.get(`${ namespace }:${ key }`);
+		return this.data.get(`${ namespace }:${ key }`) as T;
 	}
 
 	public setData<T>(namespace : string, key : string, value : T) : void {
@@ -60,7 +61,7 @@ export class RenderContext {
 		}
 
 		if (!scopeChanged && typeof this.data !== 'object') {
-			throw new Error(`Cannot get property '${ path }' of primitive value '${ this.data }'`);
+			throw new Error(`Cannot get property '${ path }' of primitive value`);
 		}
 
 		while (keys.length > 0) {
@@ -70,14 +71,18 @@ export class RenderContext {
 				break;
 			}
 
-			data = data[key];
+			if (typeof data !== 'object') {
+				throw new TypeError(`Cannot get property '${ key }' of primitive value`);
+			}
+
+			data = (data as Record<string, any>)[key];
 		}
 
 		if (data === undefined) {
-			return this.parent?.getVariable(path);
+			return this.parent?.getVariable(path); // eslint-disable-line @typescript-eslint/no-unsafe-return
 		}
 
-		return data;
+		return data; // eslint-disable-line @typescript-eslint/no-unsafe-return
 	}
 
 	public setVariable(key : string, value : any) : void {
@@ -98,7 +103,7 @@ export class RenderContext {
 			return ident.value;
 		}
 
-		return this.getVariable(ident.value.toString());
+		return this.getVariable(ident.value.toString()); // eslint-disable-line @typescript-eslint/no-unsafe-return
 	}
 
 	public createChildContext(file ? : string) : RenderContext {
@@ -143,7 +148,8 @@ export class RenderContext {
 					return JSON.stringify(child, undefined, 2);
 				}
 
-				throw new Error('Not renderable: ' + child);
+				Logger.error('Not renderable:', child);
+				throw new Error(`Not renderable`);
 			}));
 		}
 

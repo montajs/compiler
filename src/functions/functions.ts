@@ -10,7 +10,7 @@ import { uppercase } from './runtimeFunctions/uppercase';
 import { each } from './runtimeFunctions/each';
 import { truncate } from './runtimeFunctions/truncate';
 import { conditionalIf } from './runtimeFunctions/if';
-import { attr } from './parserFunctions/attr';
+import { attr as attribute } from './parserFunctions/attr';
 import { RenderContext } from '../RenderContext';
 import { Token } from '../parser/Token';
 import { Node } from '../parser/Node';
@@ -19,14 +19,14 @@ import { RenderFn } from '../Template';
 import { extend } from './parserFunctions/extend';
 
 export interface MontaFunctionContext {
-	input? : any;
+	input ? : any;
 	params : Map<string, Token>;
 	blocks : MultiMap<string, RenderFn>;
 	context : RenderContext;
 }
 
 export interface MontaParserFunctionContext {
-	input? : any;
+	input ? : any;
 	params : Map<string, Token>;
 	blocks : MultiMap<string, RenderFn>;
 	context : ParseContext;
@@ -61,4 +61,4 @@ registerParserFunction('block', block);
 registerParserFunction('extends', extend);
 registerParserFunction('include', include);
 registerParserFunction('component', component);
-registerParserFunction('attr', attr);
+registerParserFunction('attr', attribute);

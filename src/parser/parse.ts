@@ -43,7 +43,7 @@ export function parseSection(section : Section) : Node[] {
 			let next = tokens.next();
 
 			if (next.type !== TokenType.Pipe) {
-				throw new Error(`Unexpected token at ${ next.line }:${ next.col }. Expected '|', found: ${ next.value }`);
+				throw new Error(`Unexpected token at ${ next.line }:${ next.col }. Expected '|', found: ${ next.value.toString() }`);
 			}
 
 			if (!tokens.hasNext()) {
@@ -52,11 +52,11 @@ export function parseSection(section : Section) : Node[] {
 		}
 
 		parsingFirstToken = false;
-		let next = tokens.next()!;
+		let next = tokens.next();
 		let peek = tokens.peek();
 
 		if (!isTokenType(next, TokenType.Literal, TokenType.Keyword)) {
-			throw new Error(`Unexpected token at ${ next.line }:${ next.col }. Expected value or keyword, found: ${ next.value }`);
+			throw new Error(`Unexpected token at ${ next.line }:${ next.col }. Expected value or keyword, found: ${ next.value.toString() }`);
 		}
 
 		if (peek === undefined) {
@@ -107,7 +107,7 @@ export function parseSection(section : Section) : Node[] {
 			continue;
 		}
 
-		throw new Error(`Unexpected token in expression: ${ next.value }`);
+		throw new Error(`Unexpected token in expression: ${ next.value.toString() }`);
 	}
 
 	return [node];
@@ -145,7 +145,7 @@ function parseFunctionNode(tokens : Iterator<Token>, keyword : Token) : { hasOwn
 			}
 
 			if (next.type !== TokenType.Comma) {
-				throw new Error(`Unexpected token '${ next.value }' at ${ next.line }:${ next.col }, expected ','`);
+				throw new Error(`Unexpected token '${ next.value.toString() }' at ${ next.line }:${ next.col }, expected ','`);
 			}
 
 			if (!tokens.hasNext()) {
@@ -185,11 +185,11 @@ function parseFunctionNode(tokens : Iterator<Token>, keyword : Token) : { hasOwn
 		}
 
 		if (peek.type !== TokenType.Assignment) {
-			throw new Error(`Unexpected token '${ peek.value }' at ${ peek.line }:${ peek.col }, expected '='`);
+			throw new Error(`Unexpected token '${ peek.value.toString() }' at ${ peek.line }:${ peek.col }, expected '='`);
 		}
 
 		if (!isTokenType(parameterValue, TokenType.Literal, TokenType.Keyword)) {
-			throw new Error(`Unexpected token '${ peek.value }' at ${ peek.line }:${ peek.col }, expected literal or variable name`);
+			throw new Error(`Unexpected token '${ peek.value.toString() }' at ${ peek.line }:${ peek.col }, expected literal or variable name`);
 		}
 
 		functionNode.params.set(parameterName.value.toString(), parameterValue);

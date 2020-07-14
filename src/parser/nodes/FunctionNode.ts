@@ -1,7 +1,7 @@
 import { Token } from '../Token';
 import MultiMap from '@woubuc/multimap';
 import { ParseContext } from '../ParseContext';
-import { RenderFn } from '../../Template';
+import { RenderFn, RenderFnOutput } from '../../Template';
 import { MontaFunction, parserFunctions, runtimeFunctions } from '../../functions/functions';
 import { Node } from '../Node';
 import { RenderContext } from '../../RenderContext';
@@ -89,7 +89,7 @@ export class FunctionNode extends Node {
 		}
 
 		Logger.groupEnd();
-		return renderFunctionNode.bind(null, runtimeFunction, functionName, {
+		return renderFunctionNode.bind(undefined, runtimeFunction, functionName, {
 			input: this.input,
 			params: this.params,
 			blocks,
@@ -103,7 +103,7 @@ async function renderFunctionNode(
 	options : { input ? : Token, params : Map<string, Token>, blocks : MultiMap<string, RenderFn> },
 	renderContext : RenderContext,
 	input : any,
-) {
+) : Promise<RenderFnOutput> {
 	Logger.group('RENDER FunctionNode');
 	Logger.info('| name: %s()', name);
 	Logger.info('| function: %s()', fn.name);

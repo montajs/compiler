@@ -18,7 +18,7 @@ export class ParseContext {
 	}
 
 	public getData<T>(namespace : string, key : string) : T | undefined {
-		return this.data.get(`${ namespace }:${ key }`);
+		return this.data.get(`${ namespace }:${ key }`) as T;
 	}
 
 	public setData<T>(namespace : string, key : string, value : T) : void {
@@ -32,7 +32,7 @@ export class ParseContext {
 			return this.parent.getVariable(key);
 		}
 
-		return value;
+		return value as T;
 	}
 
 	public setVariable<T>(key : string, value : T) : void {

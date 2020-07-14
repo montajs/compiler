@@ -31,7 +31,7 @@ export class GroupNode extends Node {
 		}
 
 		Logger.groupEnd();
-		return renderGroupNode.bind(null, children);
+		return renderGroupNode.bind(undefined, children);
 	}
 }
 

@@ -1,6 +1,6 @@
 import { Token } from '../Token';
 import { ParseContext } from '../ParseContext';
-import { RenderFn } from '../../Template';
+import { RenderFn, RenderFnOutput } from '../../Template';
 import { RenderContext } from '../../RenderContext';
 import { Node } from '../Node';
 import { Logger } from '../../utils/Logger';
@@ -34,28 +34,28 @@ export class ComparisonNode extends Node {
 
 		switch (this.operator.value) {
 			case '==':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a == b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a == b);
 			case '===':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a === b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a === b);
 			case '!=':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a != b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a != b);
 			case '!==':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a !== b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a !== b);
 			case '>':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a > b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a > b);
 			case '<':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a < b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a < b);
 			case '>=':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a >= b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a >= b);
 			case '<=':
-				return renderComparisonNode.bind(null, left, right, (a, b) => a <= b);
+				return renderComparisonNode.bind(undefined, left, right, (a, b) => a <= b);
 		}
 
-		throw new Error('Invalid comparison operator: ' + this.operator.value);
+		throw new Error(`Invalid comparison operator: ${ this.operator.value.toString() }`);
 	}
 }
 
-function renderComparisonNode(left : RenderFn, right : RenderFn, comparer : (a : any, b : any) => boolean, renderContext : RenderContext) {
+function renderComparisonNode(left : RenderFn, right : RenderFn, comparer : (a : any, b : any) => boolean, renderContext : RenderContext) : RenderFnOutput {
 	Logger.group('RENDER ComparisonNode');
 	let result = comparer(left(renderContext), right(renderContext));
 	Logger.groupEnd();
