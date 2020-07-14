@@ -57,3 +57,62 @@ test('tokenise multiple pipe', () => {
 	expect(tokens[7]).toHaveProperty('type', TokenType.BraceOpen);
 	expect(tokens[8]).toHaveProperty('type', TokenType.BraceClose);
 });
+
+describe('tokenise comparisons', () => {
+	test('==', () => {
+		let tokens = tokenise(scan('{ foo == 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '==');
+	});
+	test('===', () => {
+		let tokens = tokenise(scan('{ foo === 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '===');
+	});
+	test('!=', () => {
+		let tokens = tokenise(scan('{ foo != 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '!=');
+	});
+	test('!==', () => {
+		let tokens = tokenise(scan('{ foo !== 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '!==');
+	});
+	test('<', () => {
+		let tokens = tokenise(scan('{ foo < 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '<');
+	});
+	test('<=', () => {
+		let tokens = tokenise(scan('{ foo <= 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '<=');
+	});
+	test('>', () => {
+		let tokens = tokenise(scan('{ foo > 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '>');
+	});
+	test('<=', () => {
+		let tokens = tokenise(scan('{ foo >= 1 }')[0]);
+
+		expect(tokens).toHaveLength(3);
+		expect(tokens[1]).toHaveProperty('type', TokenType.Operator);
+		expect(tokens[1]).toHaveProperty('value', '>=');
+	});
+});

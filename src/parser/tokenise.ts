@@ -20,7 +20,7 @@ const SINGLE_CHAR_TOKENS : Readonly<Record<string, TokenType>> = {
 	'<': TokenType.Operator,
 };
 
-const OPERATOR_TOKENS = ['==', '===', '!=', '!==', '<=', '>='];
+const OPERATOR_TOKENS = ['===', '==', '!==', '!=', '<=', '>='];
 
 export function tokenise(section : Section) : Token[] {
 	let source = createSectionIterator(section);
@@ -58,16 +58,7 @@ export function tokenise(section : Section) : Token[] {
 			continue;
 		}
 
-		if (Object.prototype.hasOwnProperty.call(SINGLE_CHAR_TOKENS, next)) {
-			tokens.push({
-				type: SINGLE_CHAR_TOKENS[next],
-				value: next,
-				line: source.line,
-				col: source.col,
-			});
-			continue;
-		}
-
+		let foundOperator = false;
 		for (let tokenValue of OPERATOR_TOKENS) {
 			if (next === tokenValue.charAt(0) && source.peekMatch(tokenValue.slice(1))) {
 				tokens.push({
@@ -77,8 +68,22 @@ export function tokenise(section : Section) : Token[] {
 					col: source.col,
 				});
 				source.skip(tokenValue.length - 1);
-				continue;
+				foundOperator = true;
+				break;
 			}
+		}
+		if (foundOperator) {
+			continue;
+		}
+
+		if (Object.prototype.hasOwnProperty.call(SINGLE_CHAR_TOKENS, next)) {
+			tokens.push({
+				type: SINGLE_CHAR_TOKENS[next],
+				value: next,
+				line: source.line,
+				col: source.col,
+			});
+			continue;
 		}
 
 		throw new Error(`Unexpected character at ${ source.line }:${ source.col }: ${ next }`);
