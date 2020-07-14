@@ -62,3 +62,23 @@ test('scan nested sections', () => {
 	expect(sections[0].children.has('default')).toBeTruthy();
 	expect(sections[0].children.get('default')).toHaveLength(1);
 });
+
+test('skip escaped code section', () => {
+	let sections = scan('\\{ foo }'); // Double `\\` to escape the backslash in the string
+
+	expect(sections).toHaveLength(1);
+	expect(sections[0]).toHaveProperty('isCode', false);
+	expect(sections[0]).toHaveProperty('content', '{ foo }');
+});
+
+test('do not skip doubly escaped code section', () => {
+	let sections = scan('\\\\{ foo }'); // Double `\\` to escape the backslash in the string
+
+	expect(sections).toHaveLength(2);
+
+	expect(sections[0]).toHaveProperty('isCode', false);
+	expect(sections[0]).toHaveProperty('content', '\\');
+
+	expect(sections[1]).toHaveProperty('isCode', true);
+	expect(sections[1]).toHaveProperty('content', ' foo ');
+})

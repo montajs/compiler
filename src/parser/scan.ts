@@ -39,8 +39,19 @@ function scanPlainTextSection(source : SourceIterator, isBlock : boolean = false
 	while (source.hasNext()) {
 		let next = source.next()!;
 
+		let escaped = false;
+		if (next === '\\' && (
+			source.peekMatch('{') ||
+			source.peekMatch('\\') ||
+			(isBlock && source.peekMatch('}')) ||
+			(isBlock && source.peekMatch(':'))
+		)) {
+			escaped = true;
+			next = source.next();
+		}
+
 		// Start of a code section
-		if (next === '{' && source.peekBack() !== '\\') {
+		if (next === '{' && !escaped) {
 			if (currentSection.content.length > 0) {
 				sections.push(currentBlockName, currentSection);
 			}
@@ -51,7 +62,7 @@ function scanPlainTextSection(source : SourceIterator, isBlock : boolean = false
 		}
 
 		// End of a function block (when in a block)
-		if (isBlock && next === '}' && source.peekBack() !== '\\') {
+		if (isBlock && next === '}' && !escaped) {
 			if (currentSection.content.length > 0) {
 				sections.push(currentBlockName, currentSection);
 			}
@@ -60,7 +71,7 @@ function scanPlainTextSection(source : SourceIterator, isBlock : boolean = false
 		}
 
 		// New block name (when in a block)
-		if (isBlock && next === ':' && source.peekBack() !== '\\') {
+		if (isBlock && next === ':' && !escaped) {
 			let { name, isValid } = getBlockName(source);
 
 			if (isValid) {
