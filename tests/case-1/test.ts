@@ -1,5 +1,6 @@
 import { configure, render } from '../../src';
 
+// TODO separate this single test file into multiple focused tests
 test('render test file', async () => {
 	configure({
 		templateRoot: __dirname,
