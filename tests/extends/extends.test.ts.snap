@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`base 1`] = `
+"
+
+<html>
+<head>
+	<title>test</title>
+	
+</head>
+<body>
+
+	<p>I extend a base template</p>
+
+</body>
+</html>
+
+
+
+"
+`;
+
+exports[`default block 1`] = `
+"
+	<p>Default content</p>
+
+
+"
+`;
+
+exports[`empty block 1`] = `
+"
+
+"
+`;
+
+exports[`nested 1`] = `
+"
+
+<html>
+<head>
+	<title>nested</title>
+	
+	<link rel=\\"stylesheet\\" href=\\"style.css\\">
+
+</head>
+<body>
+
+	<p>I extend a nested base template</p>
+
+</body>
+</html>
+
+
+
+
+
+
+"
+`;
+
+exports[`relative 1`] = `
+"
+	<p>Default content</p>
+
+
+
+"
+`;
