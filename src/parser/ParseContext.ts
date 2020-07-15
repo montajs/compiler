@@ -13,7 +13,8 @@ export class ParseContext {
 
 	private parent ?: ParseContext;
 
-	public constructor(file : string) {
+	public constructor(file : string, parentFile : string = '') {
+		this.file = parentFile;
 		this.file = this.resolveFilename(file);
 	}
 
@@ -52,7 +53,7 @@ export class ParseContext {
 	}
 
 	public createChildContext(file : string) : ParseContext {
-		let context = new ParseContext(file);
+		let context = new ParseContext(file, this.file);
 		context.parent = this;
 		context.data = this.data;
 		return context;
@@ -63,13 +64,14 @@ export class ParseContext {
 			filename += '.mt';
 		}
 
-		let file : string;
-		if (filename.startsWith('.')) {
-			file = path.resolve(path.dirname(this.file), filename);
-		} else {
-			file = path.resolve(options.templateRoot, filename);
+		if (filename.startsWith('./')) {
+			if (this.file.length === 0) {
+				return path.resolve(process.cwd(), filename);
+			}
+
+			return path.resolve(path.dirname(this.file), filename);
 		}
 
-		return file;
+		return path.resolve(options.templateRoot, filename);
 	}
 }
