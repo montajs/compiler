@@ -10,6 +10,7 @@ import { OutputNode } from './nodes/OutputNode';
 import { ExpressionNode } from './nodes/ExpressionNode';
 import { VariableNode } from './nodes/VariableNode';
 import { FunctionNode } from './nodes/FunctionNode';
+import { ComparisonNode } from './nodes/ComparisonNode';
 
 /**
  * Parses a section and returns a template-ready node
@@ -60,19 +61,7 @@ export function parseSection(section : Section) : Node[] {
 		}
 
 		if (peek === undefined) {
-			if (section.children.get('default').length > 0) {
-				let functionNode = new FunctionNode({
-					type: TokenType.Keyword,
-					value: 'if',
-					line: next.line,
-					col: next.col,
-				});
-
-				functionNode.input = next;
-				functionNode.blocks = parseBlocks(section);
-
-				node.members.push(functionNode);
-			} else if (next.type === TokenType.Literal) {
+			if (next.type === TokenType.Literal) {
 				node.members.push(new OutputNode(next));
 			} else if (next.type === TokenType.Keyword) {
 				node.members.push(new VariableNode(next));
@@ -89,28 +78,56 @@ export function parseSection(section : Section) : Node[] {
 				node.members = [];
 			}
 
-			if (!tokens.hasNext()) {
-				functionNode.blocks = parseBlocks(section);
-			}
-
 			node.members.push(functionNode);
 			continue;
 		}
 
-		if (next.type === TokenType.Literal) {
-			node.members.push(new OutputNode(next));
+		if (peek.type === TokenType.Operator) {
+			let operator = tokens.next();
+			let right = nodeFromToken(tokens.next());
+			let left = nodeFromToken(next);
+
+			node.members.push(new ComparisonNode(left, operator, right));
 			continue;
 		}
 
-		if (next.type === TokenType.Keyword) {
-			node.members.push(new VariableNode(next));
+		if (isTokenType(next, TokenType.Literal, TokenType.Keyword)) {
+			node.members.push(nodeFromToken(next));
 			continue;
 		}
 
 		throw new Error(`Unexpected token in expression: ${ next.value.toString() }`);
 	}
 
+	if (section.children.flatSize > 0) {
+		let lastNodeIndex = node.members.length - 1;
+		if (node.members[lastNodeIndex] instanceof FunctionNode) {
+			(node.members[lastNodeIndex] as FunctionNode).blocks = parseBlocks(section);
+		} else {
+			let functionNode = new FunctionNode({
+				type: TokenType.Keyword,
+				value: 'if',
+				line: 0,
+				col: 0,
+			});
+			functionNode.blocks = parseBlocks(section);
+			node.members.push(functionNode);
+		}
+	}
+
 	return [node];
+}
+
+function nodeFromToken(token : Token) : Node {
+	if (token.type === TokenType.Literal) {
+		return new OutputNode(token);
+	}
+
+	if (token.type === TokenType.Keyword) {
+		return new VariableNode(token);
+	}
+
+	throw new Error(`Invalid token type, expected operator got ${ token.type.toString() }`);
 }
 
 function parseBlocks(section : Section) : MultiMap<string, Node> {

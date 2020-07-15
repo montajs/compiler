@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`false / false / false 1`] = `
+"
+
+
+	<p>not ok</p>
+
+
+<p> false </p>
+"
+`;
+
+exports[`false / false / true 1`] = `
+"
+
+
+	<p>not ok</p>
+
+
+<p> true </p>
+"
+`;
+
+exports[`false / true / false 1`] = `
+"
+
+
+	<p>ok</p>
+
+
+<p> false </p>
+"
+`;
+
+exports[`false / true / true 1`] = `
+"
+
+
+	<p>ok</p>
+
+
+<p> true </p>
+"
+`;
+
+exports[`true / false / false 1`] = `
+"
+	<p>yes</p>
+
+
+
+	<p>not ok</p>
+
+
+<p> false </p>
+"
+`;
+
+exports[`true / false / true 1`] = `
+"
+	<p>yes</p>
+
+
+
+	<p>not ok</p>
+
+
+<p> true </p>
+"
+`;
+
+exports[`true / true / false 1`] = `
+"
+	<p>yes</p>
+
+
+
+	<p>ok</p>
+
+
+<p> false </p>
+"
+`;
+
+exports[`true / true / true 1`] = `
+"
+	<p>yes</p>
+
+
+
+	<p>ok</p>
+
+
+<p> true </p>
+"
+`;
