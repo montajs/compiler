@@ -18,6 +18,32 @@ test('tokenise literal', () => {
 	expect(tokenise(sections[2])[0]).toHaveProperty('type', TokenType.Literal);
 });
 
+describe('parse string literal', () => {
+	test('basic', () => {
+		let tokens = tokenise(scan(`{ 'foo' }`)[0]);
+		expect(tokens).toHaveLength(1);
+
+		expect(tokens[0]).toHaveProperty('type', TokenType.Literal);
+		expect(tokens[0]).toHaveProperty('value', 'foo');
+	});
+
+	test('with closing braces', () => {
+		let tokens = tokenise(scan(`{ ')}' }`)[0]);
+		expect(tokens).toHaveLength(1);
+
+		expect(tokens[0]).toHaveProperty('type', TokenType.Literal);
+		expect(tokens[0]).toHaveProperty('value', ')}');
+	});
+
+	test('with escaped delimiter', () => {
+		let tokens = tokenise(scan(`{ '\\'' }`)[0]);
+		expect(tokens).toHaveLength(1);
+
+		expect(tokens[0]).toHaveProperty('type', TokenType.Literal);
+		expect(tokens[0]).toHaveProperty('value', `'`);
+	});
+});
+
 test('tokenise function', () => {
 	let tokens = tokenise(scan('{ foo(bar, baz = 1) }')[0]);
 

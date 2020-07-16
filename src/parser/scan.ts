@@ -125,10 +125,30 @@ function scanCodeSection(source : SourceIterator) : Section {
 			return currentSection;
 		}
 
+		if (next === `'` || next === `"`) {
+			currentSection.content += collectString(source, next);
+			continue;
+		}
+
 		currentSection.content += next;
 	}
 
 	throw new Error(`Unexpected end of file (code section started at ${ currentSection.col }:${ currentSection.line })`);
+}
+
+function collectString(source : SourceIterator, delimiter : string) : string {
+	let value = delimiter;
+
+	while (source.hasNext()) {
+		let next = source.next();
+		value += next;
+
+		if (next === delimiter && source.peekBack(2) !== '\\') {
+			return value;
+		}
+	}
+
+	throw new Error(`Unexpected end of file, expected: ${ delimiter }`)
 }
 
 /**

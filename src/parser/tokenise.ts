@@ -92,7 +92,7 @@ export function tokenise(section : Section) : Token[] {
 	return tokens;
 }
 
-function getStringLiteral(source : SourceIterator, quote : string) : Token {
+function getStringLiteral(source : SourceIterator, delimiter : string) : Token {
 	let { line, col } = source;
 
 	let value = '';
@@ -100,7 +100,13 @@ function getStringLiteral(source : SourceIterator, quote : string) : Token {
 	while (source.hasNext()) {
 		let next = source.next();
 
-		if (next === quote && source.peekBack() !== '\\') {
+		if (next === '\\' && source.peekMatch(delimiter)) {
+			value += delimiter;
+			source.skip();
+			continue;
+		}
+
+		if (next === delimiter) {
 			return {
 				type: TokenType.Literal,
 				value,
@@ -112,7 +118,7 @@ function getStringLiteral(source : SourceIterator, quote : string) : Token {
 		value += next;
 	}
 
-	throw new Error(`Unexpected end of string, expected: ${ quote }`);
+	throw new Error(`Unexpected end of string, expected: ${ delimiter }`);
 }
 
 function getNumberLiteral(source : SourceIterator, start : string) : Token {

@@ -24,6 +24,28 @@ test('scan single code section', () => {
 	expect(sections[0]).toHaveProperty('content', ' foo ');
 });
 
+describe('scan string in code section', () => {
+	test('with closing braces', () => {
+		let sections = scan(`{ foo(')}') }`);
+
+		expect(sections).toHaveLength(1);
+		expect(typeof sections[0]).toBe('object');
+
+		expect(sections[0]).toHaveProperty('isCode', true);
+		expect(sections[0]).toHaveProperty('content', ` foo('}') `);
+	});
+
+	test('with escaped delimiter', () => {
+		let sections = scan(`{ foo('\\'') }`);
+
+		expect(sections).toHaveLength(1);
+		expect(typeof sections[0]).toBe('object');
+
+		expect(sections[0]).toHaveProperty('isCode', true);
+		expect(sections[0]).toHaveProperty('content', ` foo('\\'') `);
+	});
+});
+
 test('scan multiple sections', () => {
 	let sections = scan('foo { bar } baz');
 
@@ -81,4 +103,4 @@ test('do not skip doubly escaped code section', () => {
 
 	expect(sections[1]).toHaveProperty('isCode', true);
 	expect(sections[1]).toHaveProperty('content', ' foo ');
-})
+});
